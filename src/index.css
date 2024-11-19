@@ -1,0 +1,13 @@
+@font-face {
+  font-family: url("./assets/digital-7\ \(mono\).ttf");
+  src: url();
+}
+
+html{
+  font-size: 62.5%;
+  font-family: 'Inter', sans-serif;
+}
+
+body{
+  
+}
