@@ -1,6 +1,6 @@
 @font-face {
-  font-family: url("./assets/digital-7\ \(mono\).ttf");
-  src: url();
+  font-family: "digital";
+  src: url("./assets/digital-7\ \(mono\).ttf");
 }
 
 html{
@@ -9,5 +9,81 @@ html{
 }
 
 body{
-  
+  background-color: rgba(25, 92, 154, 0.66);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container{
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title{
+  font-size: 4rem;
+}
+
+.labels{
+  font-size: 2rem;
+}
+
+.time-lengths-container{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.time-length{
+  display: flex;
+  flex-direction: column;
+}
+
+.time-length-display{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.length-value{
+  font-size: 2rem;
+  margin: 0 5px;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.clock{
+  margin-top: 30px;
+  text-align: center;
+  border: 10px solid white;
+  border-radius: 10px;
+}
+
+.clock-name{
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.time-display{
+  font-size: 10rem;
+  font-family: "digital", "sans-serif";
+  padding: 20px;
+  color: rgb(24, 125, 24);
+}
+
+.other-buttons{
+  margin-top: 15px;
+  display: flex;
 }
