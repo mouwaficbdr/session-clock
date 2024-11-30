@@ -1,8 +1,57 @@
-# React + Vite
+# Session Clock
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+Session Clock is a simple timer application that allows users to manage work sessions and breaks. Inspired by the Pomodoro technique, this app helps improve productivity by alternating between focused work periods and breaks.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+- Set the duration for work sessions and breaks.
+- Display remaining time in minutes and seconds.
+- Sound notification at the end of each session.
+- Responsive and user-friendly interface.
+
+## Technologies Used
+
+- **React**: JavaScript library for building user interfaces.
+- **Vite**: Build tool for fast development.
+
+## Installation
+
+To install the project, follow these steps:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/session-clock.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd session-clock
+   ```
+
+3. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+## Starting the Application
+
+To start the application in development mode, use the following command:
+
+```bash
+npm run dev
+```
+
+## Authors
+
+- Me - [Github](https://github.com/mouwaficbdr)
+
+Live demo here: [Session-Clock](https://github.com/mouwaficbdr)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details
