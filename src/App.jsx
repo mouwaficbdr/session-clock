@@ -1,28 +1,71 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
-
-function formatMinutes(minutes) {
-  return minutes < 10 ? '0' + minutes : minutes.toString();
-}
 
 export default function App() {
 
-  const [breakLength, setBreakLength] = useState(5);
-  const [sessionLength, setSessionLength] = useState(25);
-  const [sessionHour, setSessionHour] = useState(25);
-  const [sessionMinutes, setSessionMinutes] = useState(0);
-  const [sessionMinutesDisplay, setSessionMinutesDisplay] = useState(formatMinutes(sessionMinutes))
+  const [breakLength, setBreakLength] = useState(5); //In minutes
+  const [sessionLength, setSessionLength] = useState(25); //In minutes
+  const [timeLeft, setTimeLeft] = useState(sessionLength * 60); //Converts the minutes in seconds
+  const [isSessionTime, setIsSessionTime] = useState(true);
+  const [isRunning, setIsRunning] = useState(false);
+  // const [timeLabel, setTimeLabel] = useState("Session");
 
+  const minutes = Math.floor(timeLeft / 60); //Find the correponding minutes
+  const seconds = timeLeft % 60;
+  const audio = document.getElementById("beep");
+  const latestIsSessionTime = useRef(isSessionTime);
+
+  useEffect(() => {
+    setTimeLeft(sessionLength * 60);
+  }, [sessionLength])
+
+  useEffect(() => {
+    latestIsSessionTime.current = isSessionTime;
+  }, [isSessionTime])
+
+  useEffect(() => {
+    if (!isRunning) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime < 1) {
+          audio.play();
+          clearInterval(timer);
+          setIsSessionTime((prev) => !prev); // Alterne entre session et pause
+          // setTimeLabel(latestIsSessionTime ? 'Session' : 'Break');
+          return latestIsSessionTime ? sessionLength * 60 : breakLength * 60; // Bascule entre les temps
+        }
+        return prevTime - 1; // Décrémentation classique
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isRunning, isSessionTime, sessionLength, breakLength, audio]);
 
   // useEffect(() => {
-  //   function countdown() {
-  //     setInterval(() => {
-  //       if (sessionMinutes === 0 && sessionHour = 0) {
-          
-  //       }
-  //     }, 1000);
-  //   }
-  // }, [sessionMinutes])
+  //   setTimeLabel(isSessionTime ? 'Session' : 'Break');
+  // }, [isSessionTime]);
+
+
+
+  function handleReset() {
+    setIsRunning(false);
+    setBreakLength(5);
+    setSessionLength(25);
+    setIsSessionTime(true);
+    setTimeLeft(25 * 60);
+    // setTimeLabel('Session');
+
+    if (!audio.paused) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+  }
+
+  const clockStyle = {
+    color: timeLeft < 60 ? "red" : ""
+  }
 
 
   return (
@@ -34,7 +77,14 @@ export default function App() {
             Break Length
           </h2>
           <div className="time-length-display">
-            <button id="break-decrement" className="button-decrement">
+            <button
+              disabled={isRunning}
+              id="break-decrement"
+              className="button-decrement"
+              onClick={() => {
+                setBreakLength((prev) => (prev <= 1 ? 1 : prev - 1));
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
@@ -49,8 +99,17 @@ export default function App() {
                 />
               </svg>
             </button>
-            <p className="length-value">{breakLength}</p>
-            <button id="break-increment" className="button-increment">
+            <p className="length-value" id="break-length">
+              {breakLength}
+            </p>
+            <button
+              disabled={isRunning}
+              id="break-increment"
+              className="button-increment"
+              onClick={() => {
+                setBreakLength((prev) => (prev === 60 ? 60 : prev + 1));
+              }}
+            >
               <svg
                 data-name="1-Arrow Up"
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,11 +125,18 @@ export default function App() {
           </div>
         </div>
         <div className="session-length time-length">
-          <h2 id="timer-label" className="labels">
+          <h2 id="session-label" className="labels">
             Session Length
           </h2>
           <div className="time-length-display">
-            <button id="session-decrement" className="button-decrement">
+            <button
+              disabled={isRunning}
+              id="session-decrement"
+              className="button-decrement"
+              onClick={() => {
+                setSessionLength((prev) => (prev <= 1 ? 1 : prev - 1));
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
@@ -85,8 +151,17 @@ export default function App() {
                 />
               </svg>
             </button>
-            <p className="length-value">{sessionLength}</p>
-            <button id="session-increment" className="button-increment">
+            <p className="length-value" id="session-length">
+              {sessionLength}
+            </p>
+            <button
+              disabled={isRunning}
+              id="session-increment"
+              className="button-increment"
+              onClick={() => {
+                setSessionLength((prev) => (prev === 60 ? 60 : prev + 1));
+              }}
+            >
               <svg
                 data-name="1-Arrow Up"
                 xmlns="http://www.w3.org/2000/svg"
@@ -103,11 +178,20 @@ export default function App() {
         </div>
       </div>
       <div className="clock">
-        <p className="clock-name">Session</p>
-        <span className="time-display">25:00</span>
+        <p className="clock-name" id="timer-label" style={clockStyle}>
+          {latestIsSessionTime ? 'Session' : 'Break'}
+        </p>
+        <span className="time-display" id="time-left" style={clockStyle}>
+          {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+        </span>
+        <audio
+          id="beep"
+          src="https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/2.mp3"
+        ></audio>
+        ;
       </div>
       <div className="other-buttons">
-        <button>
+        <button id="start_stop" onClick={() => setIsRunning((prev) => !prev)}>
           <svg
             fill="#000000"
             viewBox="0 0 24 24"
@@ -123,14 +207,14 @@ export default function App() {
             </g>
           </svg>
         </button>
-        <button>
+        <button id="reset" onClick={() => handleReset()}>
           <svg
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             fill="#000000"
             width="30"
             height="30"
-          >            
+          >
             <g id="SVGRepo_iconCarrier">
               {' '}
               <g>
