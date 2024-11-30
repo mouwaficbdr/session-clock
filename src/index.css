@@ -64,6 +64,14 @@ button {
   cursor: pointer;
 }
 
+button:not(.button-increment):hover{
+  transform: translateY(4px);
+}
+
+.button-increment:hover{
+  transform: translateY(-4px);
+}
+
 .clock{
   margin-top: 30px;
   text-align: center;
@@ -84,6 +92,6 @@ button {
 }
 
 .other-buttons{
-  margin-top: 15px;
+  margin-top: 25px;
   display: flex;
 }
