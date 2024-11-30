@@ -95,3 +95,14 @@ button:not(.button-increment):hover{
   margin-top: 25px;
   display: flex;
 }
+
+
+@media only screen and (min-width: 500px) {
+  .time-lengths-container{
+    flex-direction: row;
+  } 
+
+  .break-length{
+    margin-right: 50px;
+  }
+}
