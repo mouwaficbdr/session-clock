@@ -31,11 +31,11 @@ export default function App() {
         if (prevTime < 1) {
           audio.play();
           clearInterval(timer);
-          setIsSessionTime((prev) => !prev); // Alterne entre session et pause
+          setIsSessionTime((prev) => !prev);
           // setTimeLabel(latestIsSessionTime ? 'Session' : 'Break');
-          return latestIsSessionTime ? sessionLength * 60 : breakLength * 60; // Bascule entre les temps
+          return latestIsSessionTime ? sessionLength * 60 : breakLength * 60; 
         }
-        return prevTime - 1; // Décrémentation classique
+        return prevTime - 1; 
       });
     }, 1000);
 
@@ -186,7 +186,7 @@ export default function App() {
         </span>
         <audio
           id="beep"
-          src="https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/2.mp3"
+          src="https://github.com/HatScripts/play-sound-every/blob/master/sounds/bell.mp3"
         ></audio>
         ;
       </div>
