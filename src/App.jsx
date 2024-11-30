@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react"
-
+import { useState, useEffect} from "react";
 
 export default function App() {
 
@@ -8,20 +7,24 @@ export default function App() {
   const [timeLeft, setTimeLeft] = useState(sessionLength * 60); //Converts the minutes in seconds
   const [isSessionTime, setIsSessionTime] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
-  // const [timeLabel, setTimeLabel] = useState("Session");
 
   const minutes = Math.floor(timeLeft / 60); //Find the correponding minutes
   const seconds = timeLeft % 60;
   const audio = document.getElementById("beep");
-  const latestIsSessionTime = useRef(isSessionTime);
-
+  
+  
   useEffect(() => {
     setTimeLeft(sessionLength * 60);
   }, [sessionLength])
 
+
   useEffect(() => {
-    latestIsSessionTime.current = isSessionTime;
-  }, [isSessionTime])
+    if (timeLeft < 1) {
+      audio.play();
+      setIsSessionTime((prev) => !prev);
+    }
+    
+  }, [timeLeft, audio])
 
   useEffect(() => {
     if (!isRunning) return;
@@ -29,23 +32,14 @@ export default function App() {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime < 1) {
-          audio.play();
-          clearInterval(timer);
-          setIsSessionTime((prev) => !prev);
-          // setTimeLabel(latestIsSessionTime ? 'Session' : 'Break');
-          return latestIsSessionTime ? sessionLength * 60 : breakLength * 60; 
+          return isSessionTime ? sessionLength * 60 : breakLength * 60; 
         }
         return prevTime - 1; 
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isRunning, isSessionTime, sessionLength, breakLength, audio]);
-
-  // useEffect(() => {
-  //   setTimeLabel(isSessionTime ? 'Session' : 'Break');
-  // }, [isSessionTime]);
-
+  }, [isRunning, isSessionTime, sessionLength, breakLength]);
 
 
   function handleReset() {
@@ -54,7 +48,6 @@ export default function App() {
     setSessionLength(25);
     setIsSessionTime(true);
     setTimeLeft(25 * 60);
-    // setTimeLabel('Session');
 
     if (!audio.paused) {
       audio.pause();
@@ -179,14 +172,14 @@ export default function App() {
       </div>
       <div className="clock">
         <p className="clock-name" id="timer-label" style={clockStyle}>
-          {latestIsSessionTime ? 'Session' : 'Break'}
+          {isSessionTime ? 'Session' : 'Break'}
         </p>
         <span className="time-display" id="time-left" style={clockStyle}>
           {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
         </span>
         <audio
           id="beep"
-          src="https://github.com/HatScripts/play-sound-every/blob/master/sounds/bell.mp3"
+          src="https://www.pacdv.com/sounds/interface_sound_effects/sound10.mp3"
         ></audio>
         ;
       </div>
